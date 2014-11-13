@@ -108,9 +108,9 @@ public class EmptyCatch extends BugChecker implements TryTreeMatcher {
       BlockTree bt = tree.getFinallyBlock();
       if (bt == null || bt.getStatements().size() == 0) {
         CatchTree lastCatch = tree.getCatches().get(tree.getCatches().size() - 1);
-        /* LineMap lineMap = state.getPath().getCompilationUnit().getLineMap();
+        LineMap lineMap = state.getPath().getCompilationUnit().getLineMap();
 
-          System.out.println("****** warning starts **************");
+         /* System.out.println("****** warning starts **************");
           System.out.println("WARNING: empty catch: " 
              + state.getPath().getCompilationUnit().getSourceFile().getName()
              // + ":" + state.getEndPosition((JCTree) tree)
@@ -340,13 +340,16 @@ public class EmptyCatch extends BugChecker implements TryTreeMatcher {
     String className = sym.owner.getQualifiedName().toString();
           
     // System.out.println("  methodName: " + methodName + ", className: " + className);
-    return ((methodName.equals("debug") 
+    return ((methodName.contains("print")
+    		&& className.equals("java.io.PrintStream"))
+    		|| 
+    		((methodName.equals("debug") 
           || methodName.equals("error")
           || methodName.equals("info")
           || methodName.equals("warn")
           || methodName.equals("trace"))
           && (className.contains("log") // this includes log4j
-              || className.contains("sl4j"))); // we assume "fatal" is a proper handling...
+              || className.contains("sl4j")))); // we assume "fatal" is a proper handling...
     }
     return false;
   }

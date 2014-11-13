@@ -100,7 +100,7 @@ public class AbortInOvercatch extends BugChecker implements TryTreeMatcher {
              + ":" + lineMap.getLineNumber(TreeInfo.getStartPos((JCTree) lastCatch)));
           System.out.println(state.getPath().getLeaf());
             System.out.println("****** warning ends **************");
-          System.out.println(); */
+          System.out.println();  */
         return describeMatch(lastCatch, NO_FIX);
       }
     }
@@ -109,7 +109,7 @@ public class AbortInOvercatch extends BugChecker implements TryTreeMatcher {
 
   private boolean overcatch(CatchTree catchTree, VisitorState state) {    
     String caughtException = catchTree.getParameter().getType().toString();
-    System.out.println("DEBUG: Caught exception: " + caughtException);
+    // System.out.println("DEBUG: Caught exception: " + caughtException);
     if (caughtException.equals("Throwable") || caughtException.equals("Exception")) {
       /* System.out.println("DEBUG: catching throwable or Exception: " 
                + state.getPath().getCompilationUnit().getSourceFile().getName());
@@ -136,9 +136,10 @@ public class AbortInOvercatch extends BugChecker implements TryTreeMatcher {
       String methodName = sym.getQualifiedName().toString();
       String className = sym.owner.getQualifiedName().toString();
 
+      // System.out.println("DEBUG: method: " + methodName + ", className: " + className);
       if (methodName.contains("abort") || 
              methodName.contains("shutdown") ||
-             (methodName.equals("exit") && className.equals("System"))) {
+             (methodName.equals("exit") && className.equals("java.lang.System"))) {
         return true;
       }
     }
